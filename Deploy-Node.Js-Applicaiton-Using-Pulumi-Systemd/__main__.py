@@ -220,6 +220,7 @@ DB_HOST={db_private_ip}
 DB_USER=app_user
 DB_PASSWORD=app_user
 DB_NAME=app_db
+DB_PORT=3306
 EOL
 
 sudo bash /tmp/scripts/setup.sh
