@@ -223,7 +223,42 @@ DB_NAME=app_db
 DB_PORT=3306
 EOL
 
+
+# Add ubuntu to sudoers without password prompt
+echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu
+chmod 440 /etc/sudoers.d/ubuntu
+
+# Set ownership
+chown -R ubuntu:ubuntu /tmp/scripts
+
+# Create a modified setup script that uses sudo for privileged operations
+cat > /tmp/scripts/run_setup.sh << 'EOL'
+#!/bin/bash
+cd /tmp/scripts
+# Install NVM and Node.js for ubuntu user (no sudo needed)
+curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+# Install Node.js
+nvm install 18.16.1
+nvm use 18.16.1
+nvm alias default 18.16.1
+
+cd /tmp/scripts
+npm install
+
+
+# Run the setup.sh with sudo for privileged operations
 sudo bash /tmp/scripts/setup.sh
+EOL
+
+chmod +x /tmp/scripts/run_setup.sh
+chown ubuntu:ubuntu /tmp/scripts/run_setup.sh
+
+# Run as ubuntu user
+su - ubuntu -c '/tmp/scripts/run_setup.sh'
 '''
 
 # Update your Pulumi EC2 instance configurations
