@@ -1,0 +1,20 @@
+{
+  "service": "payment-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "Payment processing service is running",
+    "endpoints": [
+      "/payments",
+      "/payments/process",
+      "/payments/status/{id}",
+      "/payments/refund"
+    ],
+    "payments_processed_today": 28,
+    "successful_payments": 26,
+    "failed_payments": 2,
+    "total_amount_processed": "$15,247.83",
+    "supported_methods": ["credit_card", "debit_card", "paypal", "apple_pay"]
+  }
+}

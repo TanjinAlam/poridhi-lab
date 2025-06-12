@@ -1,0 +1,135 @@
+{
+  "service": "multi-datacenter-service-discovery",
+  "status": "active",
+  "version": "2.0.0",
+  "timestamp": "2025-06-12T00:00:00Z",
+  "datacenter": "DC3",
+  "region": "Asia-Pacific",
+  "inter_dc_connectivity": true,
+  "data": {
+    "message": "Multi-datacenter service discovery is running",
+    "local_services": [
+      {
+        "name": "gateway-nginx-dc3",
+        "url": "http://gateway-nginx-dc3:8081",
+        "datacenter": "DC3",
+        "region": "Asia-Pacific",
+        "status": "healthy",
+        "last_check": "2025-06-12T12:34:56Z"
+      },
+      {
+        "name": "discovery-nginx",
+        "url": "http://discovery-nginx:8500",
+        "datacenter": "DC3",
+        "region": "Asia-Pacific",
+        "status": "healthy",
+        "last_check": "2025-06-12T12:34:56Z"
+      }
+    ],
+    "global_services": {
+      "DC1": [
+        {
+          "name": "gateway-nginx",
+          "url": "http://gateway-nginx:80",
+          "datacenter": "DC1",
+          "region": "North-America",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:30:00Z"
+        },
+        {
+          "name": "user-nginx",
+          "url": "http://user-nginx:8082",
+          "datacenter": "DC1",
+          "region": "North-America",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:30:00Z"
+        },
+        {
+          "name": "catalog-nginx",
+          "url": "http://catalog-nginx:8083",
+          "datacenter": "DC1",
+          "region": "North-America",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:30:00Z"
+        },
+        {
+          "name": "order-nginx",
+          "url": "http://order-nginx:8084",
+          "datacenter": "DC1",
+          "region": "North-America",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:30:00Z"
+        },
+        {
+          "name": "analytics-nginx",
+          "url": "http://analytics-nginx:8087",
+          "datacenter": "DC1",
+          "region": "North-America",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:30:00Z"
+        }
+      ],
+      "DC2": [
+        {
+          "name": "gateway-nginx-dc2",
+          "url": "http://gateway-nginx-dc2:8080",
+          "datacenter": "DC2",
+          "region": "Europe",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:31:00Z"
+        },
+        {
+          "name": "payment-nginx",
+          "url": "http://payment-nginx:8085",
+          "datacenter": "DC2",
+          "region": "Europe",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:31:00Z"
+        },
+        {
+          "name": "notify-nginx",
+          "url": "http://notify-nginx:8086",
+          "datacenter": "DC2",
+          "region": "Europe",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:31:00Z"
+        }
+      ],
+      "DC3": [
+        {
+          "name": "gateway-nginx-dc3",
+          "url": "http://gateway-nginx-dc3:8081",
+          "datacenter": "DC3",
+          "region": "Asia-Pacific",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:34:56Z"
+        },
+        {
+          "name": "discovery-nginx",
+          "url": "http://discovery-nginx:8500",
+          "datacenter": "DC3",
+          "region": "Asia-Pacific",
+          "status": "healthy",
+          "last_check": "2025-06-12T12:34:56Z"
+        }
+      ]
+    },
+    "routing_topology": {
+      "inter_dc_backbone": "192.168.100.0/24",
+      "gateway_ips": {
+        "DC1": "192.168.100.10",
+        "DC2": "192.168.100.20",
+        "DC3": "192.168.100.30"
+      },
+      "discovery_ip": "192.168.100.40",
+      "connectivity_type": "full_mesh"
+    },
+    "statistics": {
+      "total_datacenters": 3,
+      "total_services": 8,
+      "healthy_services": 8,
+      "unhealthy_services": 0,
+      "cross_dc_queries_enabled": true
+    }
+  }
+}

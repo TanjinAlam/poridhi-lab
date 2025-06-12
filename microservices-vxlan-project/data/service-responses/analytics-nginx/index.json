@@ -1,0 +1,25 @@
+{
+  "service": "analytics-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "Analytics service is running",
+    "metrics": {
+      "total_requests": 1250,
+      "average_response_time": "120ms",
+      "error_rate": "0.2%",
+      "uptime": "99.9%",
+      "peak_requests_per_hour": 347,
+      "unique_visitors": 892
+    },
+    "endpoints": [
+      "/analytics/reports",
+      "/analytics/metrics",
+      "/analytics/dashboard",
+      "/analytics/real-time"
+    ],
+    "reports_generated": 15,
+    "data_points_collected": 45678
+  }
+}

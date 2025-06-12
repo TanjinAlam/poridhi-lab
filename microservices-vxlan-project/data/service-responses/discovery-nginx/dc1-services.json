@@ -1,0 +1,51 @@
+{
+  "datacenter": "DC1",
+  "region": "North-America",
+  "services": [
+    {
+      "name": "gateway",
+      "port": 80,
+      "ip": "172.20.0.10",
+      "container_ip": "172.20.1.10",
+      "backbone_ip": "192.168.100.10",
+      "status": "healthy",
+      "type": "primary_gateway"
+    },
+    {
+      "name": "user",
+      "port": 8082,
+      "ip": "172.20.0.11",
+      "container_ip": "172.20.1.20",
+      "status": "healthy",
+      "type": "user_service"
+    },
+    {
+      "name": "catalog",
+      "port": 8083,
+      "ip": "172.20.0.12",
+      "container_ip": "172.20.1.40",
+      "status": "healthy",
+      "type": "catalog_service"
+    },
+    {
+      "name": "order",
+      "port": 8084,
+      "ip": "172.20.0.13",
+      "container_ip": "172.20.1.30",
+      "status": "healthy",
+      "type": "order_service"
+    },
+    {
+      "name": "analytics",
+      "port": 8087,
+      "ip": "172.20.0.14",
+      "container_ip": "172.20.1.50",
+      "status": "healthy",
+      "type": "analytics_service"
+    }
+  ],
+  "status": "active",
+  "total_services": 5,
+  "load_balancer": "active",
+  "last_updated": "2025-06-12T12:30:00Z"
+}

@@ -1,0 +1,19 @@
+{
+  "service": "order-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "Order processing service is running",
+    "endpoints": [
+      "/orders",
+      "/orders/{id}",
+      "/orders/create",
+      "/orders/status/{id}"
+    ],
+    "orders_processed_today": 42,
+    "pending_orders": 8,
+    "completed_orders": 34,
+    "average_processing_time": "5.2 minutes"
+  }
+}

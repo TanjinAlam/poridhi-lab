@@ -1,0 +1,43 @@
+{
+  "datacenter": "DC2",
+  "region": "Europe",
+  "services": [
+    {
+      "name": "gateway",
+      "port": 8080,
+      "ip": "172.21.0.10",
+      "container_ip": "172.21.1.10",
+      "backbone_ip": "192.168.100.20",
+      "status": "healthy",
+      "type": "backup_gateway"
+    },
+    {
+      "name": "payment",
+      "port": 8085,
+      "ip": "172.21.0.11",
+      "container_ip": "172.21.1.20",
+      "status": "healthy",
+      "type": "payment_service"
+    },
+    {
+      "name": "notification",
+      "port": 8086,
+      "ip": "172.21.0.12",
+      "container_ip": "172.21.1.30",
+      "status": "healthy",
+      "type": "notification_service"
+    },
+    {
+      "name": "order-replica",
+      "port": 8088,
+      "ip": "172.21.0.13",
+      "container_ip": "172.21.1.40",
+      "status": "healthy",
+      "type": "order_replica_service"
+    }
+  ],
+  "status": "active",
+  "total_services": 4,
+  "gateway_type": "backup",
+  "last_updated": "2025-06-12T12:31:00Z"
+}

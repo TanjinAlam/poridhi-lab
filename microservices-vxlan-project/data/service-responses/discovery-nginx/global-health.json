@@ -1,0 +1,60 @@
+{
+  "global_health": "healthy",
+  "datacenters": {
+    "DC1": {
+      "status": "healthy",
+      "services": 5,
+      "active_services": 5,
+      "failed_services": 0,
+      "gateway_status": "operational",
+      "last_check": "2025-06-12T12:30:00Z",
+      "response_time": "12ms",
+      "cpu_usage": "15%",
+      "memory_usage": "32%"
+    },
+    "DC2": {
+      "status": "healthy",
+      "services": 4,
+      "active_services": 4,
+      "failed_services": 0,
+      "gateway_status": "operational",
+      "last_check": "2025-06-12T12:31:00Z",
+      "response_time": "18ms",
+      "cpu_usage": "12%",
+      "memory_usage": "28%"
+    },
+    "DC3": {
+      "status": "healthy",
+      "services": 8,
+      "active_services": 2,
+      "standby_services": 6,
+      "failed_services": 0,
+      "gateway_status": "operational",
+      "discovery_status": "primary",
+      "last_check": "2025-06-12T12:34:56Z",
+      "response_time": "8ms",
+      "cpu_usage": "8%",
+      "memory_usage": "18%"
+    }
+  },
+  "total_healthy": 17,
+  "total_unhealthy": 0,
+  "total_standby": 6,
+  "inter_dc_latency": {
+    "DC1-DC2": "45ms",
+    "DC1-DC3": "120ms",
+    "DC2-DC3": "89ms"
+  },
+  "backbone_network": {
+    "status": "operational",
+    "utilization": "15%",
+    "packet_loss": "0.01%"
+  },
+  "load_balancing": {
+    "algorithm": "round_robin",
+    "health_check_interval": "30s",
+    "failover_timeout": "10s"
+  },
+  "alerts": [],
+  "last_global_check": "2025-06-12T12:35:00Z"
+}

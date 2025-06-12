@@ -1,0 +1,41 @@
+{
+  "service": "catalog-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "Product catalog service is running",
+    "products": [
+      {
+        "id": 1,
+        "name": "Laptop",
+        "price": 999.99,
+        "category": "Electronics",
+        "stock": 25
+      },
+      {
+        "id": 2,
+        "name": "Smartphone",
+        "price": 599.99,
+        "category": "Electronics",
+        "stock": 50
+      },
+      {
+        "id": 3,
+        "name": "Book",
+        "price": 19.99,
+        "category": "Literature",
+        "stock": 100
+      },
+      {
+        "id": 4,
+        "name": "Headphones",
+        "price": 79.99,
+        "category": "Electronics",
+        "stock": 30
+      }
+    ],
+    "total_products": 4,
+    "categories": ["Electronics", "Literature"]
+  }
+}

@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # =============================================================================
+  # DC1 (North America - Primary) - Gateway Test
+  # =============================================================================
+  
+  gateway-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx
+    ports:
+      - "80:80"
+    environment:
+      - DATACENTER_ID=DC1
+      - REGION=North_America
+      - VXLAN_ID=200
+    container_name: gateway-dc1
+    restart: unless-stopped
+
+  # =============================================================================
+  # DC2 (Europe - Secondary) - Gateway Test
+  # =============================================================================
+  
+  gateway-nginx-dc2:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx-dc2
+    ports:
+      - "8080:80"
+    environment:
+      - DATACENTER_ID=DC2
+      - REGION=Europe
+      - VXLAN_ID=300
+      - GATEWAY_TYPE=backup
+    container_name: gateway-dc2-backup
+    restart: unless-stopped
+
+  # =============================================================================
+  # DC3 (Asia-Pacific - DR) - Gateway Test
+  # =============================================================================
+  
+  gateway-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx-dc3
+    ports:
+      - "8081:80"
+    environment:
+      - DATACENTER_ID=DC3
+      - REGION=Asia_Pacific
+      - VXLAN_ID=400
+      - GATEWAY_TYPE=standby
+    container_name: gateway-dc3-standby
+    restart: unless-stopped
+
+  # =============================================================================
+  # Core Services for Testing
+  # =============================================================================
+
+  user-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.user-nginx
+    ports:
+      - "8082:8080"
+    environment:
+      - DATACENTER_ID=DC1
+      - SERVICE_NAME=user
+      - REGION=North_America
+    container_name: user-service-dc1
+    restart: unless-stopped
+
+  discovery-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.discovery-nginx
+    ports:
+      - "8500:8500"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=discovery
+      - REGION=Asia_Pacific
+    container_name: discovery-service-dc3
+    restart: unless-stopped

@@ -1,0 +1,47 @@
+{
+  "inter_dc_backbone": "192.168.100.0/24",
+  "gateway_ips": {
+    "DC1": "192.168.100.10",
+    "DC2": "192.168.100.20",
+    "DC3": "192.168.100.30"
+  },
+  "discovery_ip": "192.168.100.40",
+  "connectivity": "full_mesh",
+  "routing_protocol": "VXLAN_simulation",
+  "network_topology": {
+    "DC1": {
+      "subnet": "172.20.0.0/16",
+      "bridge": "br-dc1",
+      "mtu": 1450,
+      "services": 5
+    },
+    "DC2": {
+      "subnet": "172.21.0.0/16",
+      "bridge": "br-dc2",
+      "mtu": 1450,
+      "services": 4
+    },
+    "DC3": {
+      "subnet": "172.22.0.0/16",
+      "bridge": "br-dc3",
+      "mtu": 1450,
+      "services": 8
+    },
+    "backbone": {
+      "subnet": "192.168.100.0/24",
+      "bridge": "br-backbone",
+      "mtu": 1500,
+      "gateway": "192.168.100.1"
+    }
+  },
+  "route_preferences": {
+    "DC1_to_DC2": "192.168.100.10->192.168.100.20",
+    "DC1_to_DC3": "192.168.100.10->192.168.100.30",
+    "DC2_to_DC1": "192.168.100.20->192.168.100.10",
+    "DC2_to_DC3": "192.168.100.20->192.168.100.30",
+    "DC3_to_DC1": "192.168.100.30->192.168.100.10",
+    "DC3_to_DC2": "192.168.100.30->192.168.100.20"
+  },
+  "health_status": "operational",
+  "last_updated": "2025-06-12T12:35:00Z"
+}

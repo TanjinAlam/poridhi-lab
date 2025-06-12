@@ -1,0 +1,21 @@
+{
+  "service": "notification-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "Notification service is running",
+    "endpoints": [
+      "/notifications",
+      "/notifications/send",
+      "/notifications/email",
+      "/notifications/sms",
+      "/notifications/push"
+    ],
+    "notifications_sent_today": 156,
+    "email_notifications": 89,
+    "sms_notifications": 34,
+    "push_notifications": 33,
+    "delivery_rate": "98.7%"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "datacenter": "DC3",
+  "region": "Asia-Pacific",
+  "services": [
+    {
+      "name": "gateway",
+      "port": 8081,
+      "ip": "172.22.0.10",
+      "container_ip": "172.22.1.10",
+      "backbone_ip": "192.168.100.30",
+      "status": "healthy",
+      "type": "disaster_recovery_gateway"
+    },
+    {
+      "name": "discovery",
+      "port": 8500,
+      "ip": "172.22.0.11",
+      "container_ip": "172.22.1.80",
+      "backbone_ip": "192.168.100.40",
+      "status": "healthy",
+      "type": "primary_discovery_service"
+    },
+    {
+      "name": "user-standby",
+      "port": 8089,
+      "ip": "172.22.0.20",
+      "container_ip": "172.22.1.20",
+      "status": "standby",
+      "type": "user_service_standby"
+    },
+    {
+      "name": "order-standby",
+      "port": 8090,
+      "ip": "172.22.0.30",
+      "container_ip": "172.22.1.30",
+      "status": "standby",
+      "type": "order_service_standby"
+    },
+    {
+      "name": "catalog-standby",
+      "port": 8091,
+      "ip": "172.22.0.40",
+      "container_ip": "172.22.1.40",
+      "status": "standby",
+      "type": "catalog_service_standby"
+    },
+    {
+      "name": "payment-standby",
+      "port": 8092,
+      "ip": "172.22.0.50",
+      "container_ip": "172.22.1.50",
+      "status": "standby",
+      "type": "payment_service_standby"
+    },
+    {
+      "name": "notification-standby",
+      "port": 8093,
+      "ip": "172.22.0.60",
+      "container_ip": "172.22.1.60",
+      "status": "standby",
+      "type": "notification_service_standby"
+    },
+    {
+      "name": "analytics-standby",
+      "port": 8094,
+      "ip": "172.22.0.70",
+      "container_ip": "172.22.1.70",
+      "status": "standby",
+      "type": "analytics_service_standby"
+    }
+  ],
+  "status": "active",
+  "total_services": 8,
+  "active_services": 2,
+  "standby_services": 6,
+  "gateway_type": "disaster_recovery",
+  "discovery_role": "primary",
+  "last_updated": "2025-06-12T12:34:56Z"
+}

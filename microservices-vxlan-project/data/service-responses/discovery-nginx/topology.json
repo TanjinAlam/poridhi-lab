@@ -1,0 +1,72 @@
+{
+  "mesh_type": "multi_datacenter",
+  "total_nodes": 17,
+  "active_nodes": 9,
+  "standby_nodes": 8,
+  "datacenters": {
+    "DC1": {
+      "services": 5,
+      "region": "North-America",
+      "gateway": "172.20.1.10",
+      "backbone_ip": "192.168.100.10",
+      "role": "primary",
+      "load_distribution": "60%"
+    },
+    "DC2": {
+      "services": 4,
+      "region": "Europe",
+      "gateway": "172.21.1.10",
+      "backbone_ip": "192.168.100.20",
+      "role": "secondary",
+      "load_distribution": "30%"
+    },
+    "DC3": {
+      "services": 8,
+      "region": "Asia-Pacific",
+      "gateway": "172.22.1.10",
+      "backbone_ip": "192.168.100.30",
+      "role": "disaster_recovery",
+      "load_distribution": "10%"
+    }
+  },
+  "inter_dc_links": [
+    {
+      "from": "DC1",
+      "to": "DC2",
+      "latency": "45ms",
+      "bandwidth": "1Gbps",
+      "status": "active"
+    },
+    {
+      "from": "DC1",
+      "to": "DC3",
+      "latency": "120ms",
+      "bandwidth": "1Gbps",
+      "status": "active"
+    },
+    {
+      "from": "DC2",
+      "to": "DC3",
+      "latency": "89ms",
+      "bandwidth": "1Gbps",
+      "status": "active"
+    }
+  ],
+  "discovery_nodes": 1,
+  "gateway_nodes": 3,
+  "service_distribution": {
+    "user_services": ["DC1", "DC3-standby"],
+    "payment_services": ["DC2", "DC3-standby"],
+    "catalog_services": ["DC1", "DC3-standby"],
+    "order_services": ["DC1", "DC2-replica", "DC3-standby"],
+    "notification_services": ["DC2", "DC3-standby"],
+    "analytics_services": ["DC1", "DC3-standby"],
+    "discovery_services": ["DC3"]
+  },
+  "failover_capabilities": {
+    "dc1_failover": ["DC2", "DC3"],
+    "dc2_failover": ["DC1", "DC3"],
+    "dc3_failover": ["DC1", "DC2"]
+  },
+  "last_topology_scan": "2025-06-12T12:35:00Z"
+}

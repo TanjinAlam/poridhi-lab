@@ -1,0 +1,12 @@
+{
+  "service": "user-service",
+  "status": "active",
+  "version": "1.0.0",
+  "timestamp": "2025-06-11T00:00:00Z",
+  "data": {
+    "message": "User service is running",
+    "endpoints": ["/users", "/users/{id}", "/auth/login", "/auth/register"],
+    "active_users": 1247,
+    "last_login": "2025-06-11T12:34:56Z"
+  }
+}

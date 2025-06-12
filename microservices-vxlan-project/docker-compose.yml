@@ -1,0 +1,408 @@
+version: '3.8'
+
+services:
+  # =============================================================================
+  # DC1 (North America - Primary) - VXLAN ID 200 - 10.200.0.0/16
+  # Services: Gateway, User, Order, Catalog (Primary services)
+  # =============================================================================
+  
+  # DC1 Gateway
+  gateway-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx
+    ports:
+      - "80:80"
+    environment:
+      - DATACENTER_ID=DC1
+      - REGION=North_America
+      - VXLAN_ID=200
+      - DATACENTER_SUBNET=10.200.0.0/16
+      - DC2_GATEWAY=192.168.100.20
+      - DC3_GATEWAY=192.168.100.30
+      - DISCOVERY_SERVICE=192.168.100.40
+    networks:
+      dc1-network:
+        ipv4_address: 172.20.1.10
+      inter-dc-backbone:
+        ipv4_address: 192.168.100.10
+    extra_hosts:
+      - "dc2-gateway:192.168.100.20"
+      - "dc3-gateway:192.168.100.30"
+      - "discovery-service:192.168.100.40"
+      - "payment-service:192.168.100.20"
+      - "notification-service:192.168.100.20"
+    container_name: gateway-dc1
+    restart: unless-stopped
+
+  # DC1 User Service
+  user-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.user-nginx
+    ports:
+      - "8082:8080"
+    environment:
+      - DATACENTER_ID=DC1
+      - SERVICE_NAME=user
+      - REGION=North_America
+    networks:
+      - dc1-network
+    container_name: user-service-dc1
+    restart: unless-stopped
+
+  # DC1 Order Service
+  order-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.order-nginx
+    ports:
+      - "8084:8082"
+    environment:
+      - DATACENTER_ID=DC1
+      - SERVICE_NAME=order
+      - REGION=North_America
+    networks:
+      dc1-network:
+        ipv4_address: 172.20.1.30
+    container_name: order-service-dc1
+    restart: unless-stopped
+
+  # DC1 Catalog Service
+  catalog-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.catalog-nginx
+    ports:
+      - "8083:8081"
+    environment:
+      - DATACENTER_ID=DC1
+      - SERVICE_NAME=catalog
+      - REGION=North_America
+    networks:
+      dc1-network:
+        ipv4_address: 172.20.1.40
+    container_name: catalog-service-dc1
+    restart: unless-stopped
+
+  # DC1 Analytics Service
+  analytics-nginx-dc1:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.analytics-nginx
+    ports:
+      - "8087:8085"
+    environment:
+      - DATACENTER_ID=DC1
+      - SERVICE_NAME=analytics
+      - REGION=North_America
+    networks:
+      dc1-network:
+        ipv4_address: 172.20.1.50
+    container_name: analytics-service-dc1
+    restart: unless-stopped
+
+  # =============================================================================
+  # DC2 (Europe - Secondary) - VXLAN ID 300 - 10.30.0.0/16
+  # Services: Gateway (backup), Payment, Notification, Order (replica)
+  # =============================================================================
+  
+  # DC2 Gateway (Backup)
+  gateway-nginx-dc2:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx-dc2
+    ports:
+      - "8080:80"
+    environment:
+      - DATACENTER_ID=DC2
+      - REGION=Europe
+      - VXLAN_ID=300
+      - DATACENTER_SUBNET=10.30.0.0/16
+      - GATEWAY_TYPE=backup
+      - DC1_GATEWAY=192.168.100.10
+      - DC3_GATEWAY=192.168.100.30
+      - DISCOVERY_SERVICE=192.168.100.40
+    networks:
+      dc2-network:
+        ipv4_address: 172.21.1.10
+      inter-dc-backbone:
+        ipv4_address: 192.168.100.20
+    extra_hosts:
+      - "dc1-gateway:192.168.100.10"
+      - "dc3-gateway:192.168.100.30"
+      - "discovery-service:192.168.100.40"
+      - "user-service:192.168.100.10"
+      - "catalog-service:192.168.100.10"
+      - "analytics-service:192.168.100.10"
+    container_name: gateway-dc2-backup
+    restart: unless-stopped
+
+  # DC2 Payment Service
+  payment-nginx-dc2:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.payment-nginx
+    ports:
+      - "8085:8083"
+    environment:
+      - DATACENTER_ID=DC2
+      - SERVICE_NAME=payment
+      - REGION=Europe
+    networks:
+      dc2-network:
+        ipv4_address: 172.21.1.20
+    container_name: payment-service-dc2
+    restart: unless-stopped
+
+  # DC2 Notification Service
+  notify-nginx-dc2:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.notify-nginx
+    ports:
+      - "8086:8084"
+    environment:
+      - DATACENTER_ID=DC2
+      - SERVICE_NAME=notification
+      - REGION=Europe
+    networks:
+      dc2-network:
+        ipv4_address: 172.21.1.30
+    container_name: notification-service-dc2
+    restart: unless-stopped
+
+  # DC2 Order Service (Replica)
+  order-nginx-dc2:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.order-nginx
+    ports:
+      - "8088:8082"
+    environment:
+      - DATACENTER_ID=DC2
+      - SERVICE_NAME=order-replica
+      - REGION=Europe
+    networks:
+      dc2-network:
+        ipv4_address: 172.21.1.40
+    container_name: order-service-dc2-replica
+    restart: unless-stopped
+
+  # =============================================================================
+  # DC3 (Asia-Pacific - DR) - VXLAN ID 400 - 10.40.0.0/16
+  # Services: All services (standby) + Discovery (Primary)
+  # =============================================================================
+  
+  # DC3 Gateway (Standby)
+  gateway-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.gateway-nginx-dc3
+    ports:
+      - "8081:80"
+    environment:
+      - DATACENTER_ID=DC3
+      - REGION=Asia_Pacific
+      - VXLAN_ID=400
+      - DATACENTER_SUBNET=10.40.0.0/16
+      - GATEWAY_TYPE=standby
+      - DC1_GATEWAY=192.168.100.10
+      - DC2_GATEWAY=192.168.100.20
+      - DISCOVERY_SERVICE=192.168.100.40
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.10
+      inter-dc-backbone:
+        ipv4_address: 192.168.100.30
+    extra_hosts:
+      - "dc1-gateway:192.168.100.10"
+      - "dc2-gateway:192.168.100.20"
+      - "discovery-service:192.168.100.40"
+      - "user-service:192.168.100.10"
+      - "payment-service:192.168.100.20"
+      - "all-services:192.168.100.40"
+    container_name: gateway-dc3-standby
+    restart: unless-stopped
+
+  # DC3 User Service (Standby)
+  user-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.user-nginx
+    ports:
+      - "8089:8080"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=user-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.20
+    container_name: user-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Order Service (Standby)
+  order-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.order-nginx
+    ports:
+      - "8090:8082"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=order-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.30
+    container_name: order-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Catalog Service (Standby)
+  catalog-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.catalog-nginx
+    ports:
+      - "8091:8081"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=catalog-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.40
+    container_name: catalog-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Payment Service (Standby)
+  payment-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.payment-nginx
+    ports:
+      - "8092:8083"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=payment-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.50
+    container_name: payment-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Notification Service (Standby)
+  notify-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.notify-nginx
+    ports:
+      - "8093:8084"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=notification-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.60
+    container_name: notification-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Analytics Service (Standby)
+  analytics-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.analytics-nginx
+    ports:
+      - "8094:8085"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=analytics-standby
+      - REGION=Asia_Pacific
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.70
+    container_name: analytics-service-dc3-standby
+    restart: unless-stopped
+
+  # DC3 Discovery Service (Primary for DC3)
+  discovery-nginx-dc3:
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.discovery-nginx
+    ports:
+      - "8500:8500"
+    environment:
+      - DATACENTER_ID=DC3
+      - SERVICE_NAME=discovery
+      - REGION=Asia_Pacific
+      - DC1_GATEWAY=192.168.100.10
+      - DC2_GATEWAY=192.168.100.20
+      - DC3_GATEWAY=192.168.100.30
+    networks:
+      dc3-network:
+        ipv4_address: 172.22.1.80
+      inter-dc-backbone:
+        ipv4_address: 192.168.100.40
+    extra_hosts:
+      - "dc1-gateway:192.168.100.10"
+      - "dc2-gateway:192.168.100.20"
+      - "dc3-gateway:192.168.100.30"
+    container_name: discovery-service-dc3
+    restart: unless-stopped
+
+networks:
+  # DC1 Network (North America - Primary)
+  dc1-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: br-dc1
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: 1450
+
+  # DC2 Network (Europe - Secondary)
+  dc2-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: br-dc2
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: 1450
+
+  # DC3 Network (Asia-Pacific - DR)
+  dc3-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/16
+    driver_opts:
+      com.docker.network.bridge.name: br-dc3
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: 1450
+
+  # Inter-Datacenter Backbone Network (Simulates VXLAN Overlay)
+  inter-dc-backbone:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.100.0/24
+          gateway: 192.168.100.1
+    driver_opts:
+      com.docker.network.bridge.name: br-backbone
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: 1500
