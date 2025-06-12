@@ -1156,33 +1156,6 @@ graph TB
     class CLIENT client
 ```
 
-        USER -.->|Auth| PAY
-        ORD -.->|Process| PAY
-        ORD -.->|Notify| NOT
-        PAY -.->|Notify| NOT
-        USER -.->|Metrics| ANA
-        ORD -.->|Metrics| ANA
-        PAY -.->|Metrics| ANA
-
-        DISC -.->|Health Check| USER
-        DISC -.->|Health Check| CAT
-        DISC -.->|Health Check| ORD
-        DISC -.->|Health Check| PAY
-        DISC -.->|Health Check| NOT
-        DISC -.->|Health Check| ANA
-    end
-
-    %% Styling
-    classDef gateway fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
-    classDef service fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef data fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-
-    class GW gateway
-    class USER,CAT,ORD,PAY,NOT,ANA,DISC service
-    class REQ data
-
-````
-
 ## VXLAN Network Architecture
 
 ```mermaid
@@ -1212,6 +1185,11 @@ graph TD
         DOCKER --> DC1_NET
         DOCKER --> DC2_NET
         DOCKER --> DC3_NET
+        
+        %% Inter-DC Network Connectivity
+        DC1_NET -.->|"VXLAN Tunnel"| DC2_NET
+        DC2_NET -.->|"VXLAN Tunnel"| DC3_NET
+        DC3_NET -.->|"VXLAN Tunnel"| DC1_NET
     end
 
     subgraph "Service Containers"
