@@ -1,0 +1,4 @@
+config:
+  aws:region: ap-southeast-1
+  systemd:allowedIp: YOUR_IP/32
+  systemd:sshPublicKey: ssh-rsa AAAAB== your_email@example.com
