@@ -75,6 +75,8 @@ pip install -r requirements.txt
 ![Task 5.1](images/task_5_1.png)
 ![Task 5.2](images/task_5_2.png)
 
+![Task 6](images/task_6.png)
+
 ## Architecture
 
 ```
